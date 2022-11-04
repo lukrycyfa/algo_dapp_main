@@ -82,7 +82,7 @@ const App = function AppWrapper() {
           </main>
         </Container>
       ) : (
-        <Cover name={"Soft Tech"} coverImg={coverImg} connect={connectWallet} />
+        <Cover name={"Gadget Store"} coverImg={coverImg} connect={connectWallet} />
       )}
     </>
   );
