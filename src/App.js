@@ -6,7 +6,7 @@ import { Container, Nav } from "react-bootstrap";
 import Gadgets from "./components/marketplace/Gadgets";
 import { Notification } from "./components/utils/Notifications";
 import { indexerClient, myAlgoConnect } from "./utils/constants";
-import coverImg from "./assets/img/pexels.jpg";
+import coverImg from "./assets/img/gadgets.jpg";
 //..
 
 //..
