@@ -135,13 +135,13 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
   });
 
   // checks if a client is eligible for a discount
-  console.log(discountEligibility(getUserGadgetAction(senderAddress)));
+  console.log(discountEligibility(getUserGadgetAction(senderAddress)), "Checker");
+  let val = (20 / 100) * nprice;
   if (discountEligibility(getUserGadgetAction(senderAddress)) === true) {
-    let val = (20 / 100) * nprice;
     if (count === 1) {
       nprice = val;
     } else if (count > 1) {
-      nprice = gadget.price * (count - 1) + val;
+      nprice = (gadget.price * (count - 1)) + val;
     }
   }
   // Create PaymentTxn
