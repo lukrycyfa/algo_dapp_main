@@ -67,9 +67,6 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
   // get  users gadgets
  const getUserGadgets = async () => {
     setLoading(true);
-//               if (allgadgets[0][0].owner !== address) {
-//               // setAppOwner(false);uncomment to restrcit creation
-//               // of application to dapp owner or First app user
      getUserGadgetAction(address)
        .then((UserGadgets) => {
             SetUsersGads(UserGadgets);
@@ -90,12 +87,10 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
                     }
                   });
                 }
-              });
-//             }
-   
+              });   
       .catch((error) => {
         console.log(error);
-      })
+      });
       .finally((_) => {
         setLoading(false);
       });
