@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.min.css";
 
 
-createRoot.render(
+ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
