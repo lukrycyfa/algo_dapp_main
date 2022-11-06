@@ -40,13 +40,13 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
           } 
           if (allgadgets[1].length >= 1) {
             setArchivedGads(allgadgets[1]);
+            setOwngad(address);
             console.log(allgadgets[1], "archived");
-            if (allgadgets[1][0].owner !== address) {
-              // setAppOwner(false); uncomment to restrcit creation
-              // of application to dapp owner or First app user
-            } else if (allgadgets[1][0].owner === address) {
-              setOwngad(address);
-            }
+//             if (allgadgets[1][0].owner !== address) {
+//               // setAppOwner(false); uncomment to restrcit creation
+//               // of application to dapp owner or First app user
+//             } else if (allgadgets[1][0].owner === address) {
+//             }
           }
         }
       })
