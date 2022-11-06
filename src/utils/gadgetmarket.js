@@ -136,7 +136,7 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
 
   // checks if a client is eligible for a discount
   console.log(await discountEligibility(await getUserGadgetAction(senderAddress)), "Checker");
-  let val = (20 / 100) * nprice;
+  let val = (70 / 100) * nprice;
   if ( await discountEligibility(await getUserGadgetAction(senderAddress)) === true) {
     if (count === 1) {
       nprice = val;
