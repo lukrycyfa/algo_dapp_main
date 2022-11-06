@@ -51,8 +51,7 @@ export const createGadgetAction = async (senderAddress, gadget, user_note) => {
   const compiledClearProgram = await compileProgram(clearProgram);
 
   // Build note to identify transaction later and required app args as Uint8Arrays
-
-  // a condition checking if user_note was passwd when function was called
+  // a condition checking if user_note was passed when the function was called
   // i.e(diffrenciates between created apps and bought created apps)
   let note = "";
   if (user_note) {
@@ -112,7 +111,7 @@ export const createGadgetAction = async (senderAddress, gadget, user_note) => {
 };
 
 //...
-// BUY GADGET: Group transaction consisting of ApplicationCallTxn and PaymentTxn
+// BUY GADGET: Group transaction consisting of ApplicationCallTxn, PaymentTxn and ApplicationCreateTxn
 export const buyGadgetAction = async (senderAddress, gadget, count) => {
   console.log("Buying Gadget...");
 
@@ -136,7 +135,7 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
   });
 
   // checks if a client is eligible for a discount
-  if (discountEligibility(senderAddress) === true) {
+  if (discountEligibility(getUserGadgetAction(senderAddress)) === true) {
     let val = (20 / 100) * nprice;
     if (count === 1) {
       nprice = val;
@@ -171,7 +170,7 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
   let confirmedTxn = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
 
   // creates a new gadget for the user from values of the original gadget
-  // the forloop specifies how many times the gadget get created but with unique I.d's
+  // the forloop specifies how many times the gadget get created 
   let user_note = new TextEncoder().encode(
     `${senderAddress.slice(0, 4)}-${senderAddress.slice(54)}:new_user`
   ); // a unique note created from users address
@@ -207,7 +206,7 @@ export const discountEligibility = async (UserGadgets) => {
   return discount;
 };
 
-//... Get gadgets apecific to loggedin user
+//... Get gadgets specific to loggedin user
 export const getUserGadgetAction = async (senderAddress) => {
   console.log("Fetching User Gadgets...");
 
@@ -285,6 +284,7 @@ export const deleteGadgetAction = async (senderAddress, index) => {
 };
 
 //..
+//GET GADGET: get Dapp Gadgets
 export const getGadgetsAction = async () => {
   console.log("Fetching gadgets...");
   let note = new TextEncoder().encode(marketplaceNote);
@@ -325,6 +325,7 @@ export const getGadgetsAction = async () => {
 };
 
 //..
+// GET APPLICATION: search the chain for created applications by id.
 const getApplication = async (appId) => {
   try {
     // 1. Get application by appId
@@ -456,6 +457,7 @@ export const updateGadgetAction = async (senderAddress, gadget) => {
 };
 
 //..
+// ARCHIVE GADGET
 export const archiveAction = async (senderAddress, appId) => {
   console.log("Moving Gadget To Archive...");
 
@@ -467,7 +469,7 @@ export const archiveAction = async (senderAddress, appId) => {
     return null;
   }
 
-  //updated here
+
   let note = new TextEncoder().encode(marketplaceNote);
   let archiveArg = new TextEncoder().encode("archive");
 
@@ -477,7 +479,7 @@ export const archiveAction = async (senderAddress, appId) => {
   params.fee = algosdk.ALGORAND_MIN_TX_FEE;
   params.flatFee = true;
 
-  //updated here
+
   // Set Param ApplicationCallTxn
   let appCallTxn = algosdk.makeApplicationCallTxnFromObject({
     from: senderAddress,
@@ -510,6 +512,7 @@ export const archiveAction = async (senderAddress, appId) => {
 };
 
 //..
+// UNARCHIVE GADGET
 export const unarchiveAction = async (senderAddress, appId) => {
   console.log("Removing Gadget from Archive...");
 
@@ -521,7 +524,6 @@ export const unarchiveAction = async (senderAddress, appId) => {
     return null;
   }
 
-  //updated here
   let note = new TextEncoder().encode(marketplaceNote);
   let unarchiveArg = new TextEncoder().encode("unarchive");
 
@@ -531,7 +533,7 @@ export const unarchiveAction = async (senderAddress, appId) => {
   params.fee = algosdk.ALGORAND_MIN_TX_FEE;
   params.flatFee = true;
 
-  //updated here
+ 
   // Set Param ApplicationCallTxn
   let appCallTxn = algosdk.makeApplicationCallTxnFromObject({
     from: senderAddress,
