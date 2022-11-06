@@ -285,7 +285,7 @@ export const deleteGadgetAction = async (senderAddress, index) => {
 
 //..
 //GET GADGET: get Dapp Gadgets
-export const getGadgetsAction = async () => {
+export const getGadgetsAction = async (senderAddress) => {
   console.log("Fetching gadgets...");
   let note = new TextEncoder().encode(marketplaceNote);
   let encodedNote = Buffer.from(note).toString("base64");
@@ -310,7 +310,7 @@ export const getGadgetsAction = async () => {
         // a checker to verify if gadget is archived or not and puts them in seprate arrays
         if (gadget.archived === 0) {
           gadgets.push(gadget);
-        } else if (gadget.archived === 1) {
+        } else if (gadget.archived === 1 && gadget.owner == senderAddress) {
           arcgadgets.push(gadget);
         }
       }
