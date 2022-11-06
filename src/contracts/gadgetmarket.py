@@ -88,7 +88,6 @@ class Gadget:
         valid_payment_to_seller = And(
             Gtxn[1].type_enum() == TxnType.Payment,
             Gtxn[1].receiver() == Global.creator_address(),
-            Gtxn[1].amount() == App.globalGet(self.Variables.price) * Btoi(count),
             Gtxn[1].sender() == Gtxn[0].sender(),
         )
 
