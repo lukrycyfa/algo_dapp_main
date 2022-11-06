@@ -61,7 +61,8 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
               });
             }
             console.log(allgadgets[0], "unarchived");
-          } else if (allgadgets[1].length >= 1) {
+          } 
+          if (allgadgets[1].length >= 1) {
             setArchivedGads(allgadgets[1]);
 
             console.log(allgadgets[1], "archived");
