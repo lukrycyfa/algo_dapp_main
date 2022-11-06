@@ -28,7 +28,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
   // const [appowner, setAppOwner] = useState(true); uncomment to restrcit creation
   // of application to dapp owner or First app user
 
-  // get dapp_gadgets(archived, unarchived) and users gadgets
+  // get dapp_gadgets(archived, unarchived) 
   const getGadgets = async () => {
     setLoading(true);
     getGadgetsAction(address)
@@ -36,35 +36,10 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
         if (allgadgets) {
           if (allgadgets[0].length >= 1) {
             setGadgets(allgadgets[0]);
-            if (allgadgets[0][0].owner !== address) {
-              // setAppOwner(false);uncomment to restrcit creation
-              // of application to dapp owner or First app user
-              getUserGadgetAction(address).then((UserGadgets) => {
-                SetUsersGads(UserGadgets);
-                if (UserGadgets.length < 1) {
-                  toast(
-                    <NotificationSuccess text="You have no discount yet." />
-                  );
-                } else if (UserGadgets.length >= 1) {
-                  discountEligibility(UserGadgets).then((discount) => {
-                    if (discount === true) {
-                      toast(
-                        <NotificationSuccess text="You'vh earned  20% on one of your next purchase for buying 5 gadgets." />
-                      );
-                    } else if (discount === false) {
-                      toast(
-                        <NotificationSuccess text="You have no discount yet." />
-                      );
-                    }
-                  });
-                }
-              });
-            }
             console.log(allgadgets[0], "unarchived");
           } 
           if (allgadgets[1].length >= 1) {
             setArchivedGads(allgadgets[1]);
-
             console.log(allgadgets[1], "archived");
             if (allgadgets[1][0].owner !== address) {
               // setAppOwner(false); uncomment to restrcit creation
@@ -89,6 +64,47 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
   }, []);
   //...
 
+  // get  users gadgets
+ const getUserGadgets = async () => {
+    setLoading(true);
+//               if (allgadgets[0][0].owner !== address) {
+//               // setAppOwner(false);uncomment to restrcit creation
+//               // of application to dapp owner or First app user
+     getUserGadgetAction(address)
+       .then((UserGadgets) => {
+            SetUsersGads(UserGadgets);
+               if (UserGadgets.length < 1) {
+                  toast(
+                    <NotificationSuccess text="You have no discount yet." />
+                  );
+                } else if (UserGadgets.length >= 1) {
+                  discountEligibility(UserGadgets).then((discount) => {
+                    if (discount === true) {
+                      toast(
+                        <NotificationSuccess text="You'vh earned  20% on one of your next purchase for buying 5 gadgets." />
+                      );
+                    } else if (discount === false) {
+                      toast(
+                        <NotificationSuccess text="You have no discount yet." />
+                      );
+                    }
+                  });
+                }
+              });
+//             }
+   
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally((_) => {
+        setLoading(false);
+      });
+  };
+  useEffect(() => {
+    getUserGadgets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
   // create Gadgets
   const createGadget = async (data) => {
     setLoading(true);
