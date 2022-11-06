@@ -310,7 +310,7 @@ export const getGadgetsAction = async (senderAddress) => {
         // a checker to verify if gadget is archived or not and puts them in seprate arrays
         if (gadget.archived === 0) {
           gadgets.push(gadget);
-        } else if (gadget.archived === 1 && gadget.owner == senderAddress) {
+        } else if (gadget.archived === 1 && gadget.owner === senderAddress) {
           arcgadgets.push(gadget);
         }
       }
