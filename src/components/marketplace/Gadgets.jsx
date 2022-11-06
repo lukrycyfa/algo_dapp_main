@@ -87,10 +87,10 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
                     }
                   });
                 }
-              });   
+              })   
       .catch((error) => {
         console.log(error);
-      });
+      })
       .finally((_) => {
         setLoading(false);
       });
