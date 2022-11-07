@@ -113,7 +113,7 @@ class Gadget:
         #with certain conditions that decides which Appmethods to call. 
         return Cond(
             [Txn.application_id() == Int(0), self.application_creation()], 
-            [Txn.on_completion() == OnComplete.DeleteApplication, 
+            [Txn.on_completion() == OnComplete.DeleteApplication, self.application_deletion()],
             [Txn.application_args[0] == self.AppMethods.buy, self.buy()], 
             [Txn.application_args[0] == self.AppMethods.update, self.update()],
             [Txn.application_args[0] == self.AppMethods.archive, self.archive()],
