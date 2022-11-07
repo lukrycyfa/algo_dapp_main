@@ -135,9 +135,9 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
   });
 
   // checks if a client is eligible for a discount
-  console.log(await discountEligibility(await getUserGadgetAction(senderAddress)), "Checker");
+  console.log(await discountEligibility(senderAddress), "Checker");
   let val = (70 / 100) * nprice;
-  if ( await discountEligibility(await getUserGadgetAction(senderAddress)) === true) {
+  if ( await discountEligibility(senderAddress) === true) {
     if (count === 1) {
       nprice = val;
     } else if (count > 1) {
@@ -192,13 +192,24 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
 //..
 // DISCOUNT ELIGIBILITY
 // verifies if a user is eligible for a discount
-export const discountEligibility = async (UserGadgets) => {
+export const discountEligibility = async (senderAddress) => {
   console.log("Checking Eligibility...");
   let discount = false;
+  let user_note = new TextEncoder().encode(
+    `${senderAddress.slice(0, 4)}-${senderAddress.slice(54)}:new_user`
+  );
+  let get_app = await indexerClient
+    .searchForTransactions()
+    .notePrefix(Buffer.from(user_note).toString("base64"))
+    .txType("appl")
+    .minRound(minRound)
+    .do();
 
-  if (UserGadgets.length <= 0) {
+  console.log(get_app.transactions.length, "discount_app");
+  let dis_val = get_app.transactions.length
+  if (dis_val <= 0) {
     discount = false;
-  } else if (UserGadgets.length > 0 && UserGadgets.length % 3 === 0) {
+  } else if (dis_val > 0 && dis_val % 3 === 0) {
     discount = true;
   } else {
     discount = false;
