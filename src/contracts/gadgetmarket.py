@@ -92,7 +92,7 @@ class Gadget:
         )
 
         can_buy = And(valid_number_of_transactions,
-                      valid_payment_to_seller) # the above variables passed for validation.
+                      valid_payment_to_seller) # the above objects passed for validation.
 
         update_state = Seq([
             # Update the sold variable global state for requested application
