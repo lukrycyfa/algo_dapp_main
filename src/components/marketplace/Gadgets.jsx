@@ -25,8 +25,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
   const [usergads, SetUsersGads] = useState([]);
   const [owngad, setOwngad] = useState("");
   const [loading, setLoading] = useState(false);
-  // const [appowner, setAppOwner] = useState(true); uncomment to restrcit creation
-  // of application to dapp owner or First app user
+
 
   // get dapp_gadgets(archived, unarchived) 
   const getGadgets = async () => {
@@ -42,11 +41,6 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
             setArchivedGads(allgadgets[1]);
             setOwngad(address);
             console.log(allgadgets[1], "archived");
-//             if (allgadgets[1][0].owner !== address) {
-//               // setAppOwner(false); uncomment to restrcit creation
-//               // of application to dapp owner or First app user
-//             } else if (allgadgets[1][0].owner === address) {
-//             }
           }
         }
       })
@@ -64,21 +58,16 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
   }, []);
   //...
 
-  // get  users gadgets
+  // get  users gadgets and check discount eligibility.
  const getUserGadgets = async () => {
     setLoading(true);
      getUserGadgetAction(address)
        .then((UserGadgets) => {
             SetUsersGads(UserGadgets);
-               if (UserGadgets.length < 1) {
-                  toast(
-                    <NotificationSuccess text="You have no discount yet." />
-                  );
-                } else if (UserGadgets.length >= 1) {
-                  discountEligibility(UserGadgets).then((discount) => {
+            discountEligibility(address).then((discount) => {
                     if (discount === true) {
                       toast(
-                        <NotificationSuccess text="You'vh earned  20% on one of your next purchase for buying 5 gadgets." />
+                        <NotificationSuccess text="You'vh earned a 30% off one of your next purchase." />
                       );
                     } else if (discount === false) {
                       toast(
@@ -86,7 +75,6 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
                       );
                     }
                   });
-                }
               })   
       .catch((error) => {
         console.log(error);
