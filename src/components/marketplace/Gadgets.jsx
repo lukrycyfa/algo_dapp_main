@@ -110,7 +110,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
     createGadgetAction(address, data)
       .then(() => {
         toast(<NotificationSuccess text="Gadget added successfully." />);
-        getGadgets();
+        refresh();
         fetchBalance(address);
       })
       .catch((error) => {
@@ -125,7 +125,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
     createGadgetAction(address, data, user_note)
       .then(() => {
         toast(<NotificationSuccess text="Gadget added successfully." />);
-        getGadgets();
+        refresh();
         fetchBalance(address);
       })
       .catch((error) => {

@@ -190,7 +190,7 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
 
 //.. freebies update
 // FreeBies ELIGIBILITY
-// verifies if a user is eligible for a FreeBies
+// verifies if a user is eligible for a freebies
 export const FreeBieEligibility = async (senderAddress) => {
   console.log("Checking Eligibility...");
   let discount = false;
@@ -327,7 +327,8 @@ export const getGadgetsAction = async (senderAddress) => {
         } else if (gadget.archived === 1 && gadget.owner === senderAddress) {
           arcgadgets.push(gadget);
             // freebies update //
-        } else if (gadget.archived === 0 && gadget.price <= 8){
+        } 
+        if (gadget.archived === 0 && gadget.price <= 8000000){
             freegadgets.push(gadget);
         }
           // freebies update //
