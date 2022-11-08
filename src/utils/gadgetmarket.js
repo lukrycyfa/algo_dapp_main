@@ -200,7 +200,7 @@ export const FreeBieEligibility = async (senderAddress) => {
   let dis_val = get_app.transactions.length
   if (dis_val <= 0) {
     discount = false;
-  } else if (dis_val > 0 && dis_val % 3 === 0) {
+  } else if (dis_val > 0 && dis_val % 8 === 0) {
     discount = true;
   } else {
     discount = false;
