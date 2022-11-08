@@ -29,7 +29,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
   const [freegads, setFreeGads] = useState([]);
   const [freebies, setFreeBies] = useState(false);
 
-  // get dapp_gadgets(archived, unarchived) 
+  // get dapp_gadgets(archived, unarchived, freebies) 
   const getGadgets = async () => {
     setLoading(true);
     getGadgetsAction(address)
@@ -37,16 +37,16 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
         if (allgadgets) {
           if (allgadgets[0].length >= 1) {
             setGadgets(allgadgets[0]);
-            console.log(allgadgets[0], "unarchived");
+
           } 
           if (allgadgets[1].length >= 1) {
             setArchivedGads(allgadgets[1]);
             setOwngad(address);
-            console.log(allgadgets[1], "archived");
+
           }
          if (allgadgets[2].length >= 1){
             setFreeGads(allgadgets[2]);
-            console.log(allgadgets[2], "freebies");
+
           }  
         }
       })
@@ -78,7 +78,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
                       );
                     } else if (discount === false) {
                       toast(
-                        <NotificationSuccess text="You have no freebie yet." />
+                        <NotificationSuccess text="You have no freebie." />
                       );
                     }
                   });
@@ -106,7 +106,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
       })
       .catch((error) => {
         console.log(error);
-        toast(<NotificationError text="Failed to create a gadget." />);
+        toast(<NotificationError text="Failed to create a gadget Your window might be blocking a pop up.." />);
         setLoading(false);
       });
   };
@@ -123,7 +123,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
       })
       .catch((error) => {
         console.log(error);
-        toast(<NotificationError text="Failed to create a gadget." />);
+        toast(<NotificationError text="Failed to create a gadget. Your window might be blocking a pop up." />);
         setLoading(false);
       });
   };
@@ -140,7 +140,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
       })
       .catch((error) => {
         console.log(error);
-        toast(<NotificationError text="Failed to purchase aadget." />);
+        toast(<NotificationError text="Failed to purchase aadget. Your window might be blocking a pop up." />);
         setLoading(false);
       });
   };
@@ -158,7 +158,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
       })
       .catch((error) => {
         console.log(error);
-        toast(<NotificationError text="Failed to delete gadget." />);
+        toast(<NotificationError text="Failed to delete gadget. Your window might be blocking a pop up." />);
         setLoading(false);
       });
   };
@@ -175,7 +175,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
       })
       .catch((error) => {
         console.log(error);
-        toast(<NotificationError text="Failed to update Gadget." />);
+        toast(<NotificationError text="Failed to update Gadget. Your window might be blocking a pop up." />);
         setLoading(false);
       });
   };
@@ -192,7 +192,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
       })
       .catch((error) => {
         console.log(error);
-        toast(<NotificationError text="Failed to update Gadget." />);
+        toast(<NotificationError text="Failed to update Gadget. Your window might be blocking a pop up." />);
         setLoading(false);
       });
   };
@@ -209,7 +209,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
       })
       .catch((error) => {
         console.log(error);
-        toast(<NotificationError text="Failed to update Gadget." />);
+        toast(<NotificationError text="Failed to update Gadget. Your window might be blocking a pop up." />);
         setLoading(false);
       });
   };
