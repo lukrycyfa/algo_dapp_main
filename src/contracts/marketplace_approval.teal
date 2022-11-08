@@ -29,8 +29,13 @@ txn NumAppArgs
 int 1
 ==
 assert
-txn Note
-byte "next-softtech:nxt5"
+txn Sender
+global CreatorAddress
+==
+assert
+byte "ARCHIVED"
+app_global_get
+int 1
 ==
 assert
 byte "ARCHIVED"
@@ -43,8 +48,13 @@ txn NumAppArgs
 int 1
 ==
 assert
-txn Note
-byte "next-softtech:nxt5"
+txn Sender
+global CreatorAddress
+==
+assert
+byte "ARCHIVED"
+app_global_get
+int 0
 ==
 assert
 byte "ARCHIVED"
@@ -59,10 +69,6 @@ global CreatorAddress
 txn NumAppArgs
 int 5
 ==
-txn Note
-byte "next-softtech:nxt5"
-==
-&&
 txna ApplicationArgs 4
 btoi
 int 0
@@ -93,15 +99,32 @@ app_global_put
 int 1
 return
 main_l12:
+byte "ARCHIVED"
+app_global_get
+int 0
+==
 global GroupSize
 int 2
 ==
+&&
 gtxn 1 TypeEnum
 int pay
 ==
+gtxn 1 Amount
+byte "PRICE"
+app_global_get
+txna ApplicationArgs 1
+btoi
+*
+==
+&&
 gtxn 1 Receiver
 global CreatorAddress
 ==
+&&
+gtxn 0 Sender
+global CreatorAddress
+!=
 &&
 gtxn 1 Sender
 gtxn 0 Sender
@@ -131,10 +154,29 @@ txn NumAppArgs
 int 4
 ==
 assert
+txna ApplicationArgs 0
+len
+int 0
+>
+txna ApplicationArgs 1
+len
+int 0
+>
+&&
+txna ApplicationArgs 2
+len
+int 0
+>
+&&
 txna ApplicationArgs 3
 btoi
 int 0
 >
+&&
+assert
+txn Note
+byte "next-softtech:nxt5"
+==
 assert
 byte "NAME"
 txna ApplicationArgs 0
