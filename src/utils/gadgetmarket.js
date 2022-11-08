@@ -316,7 +316,9 @@ export const getGadgetsAction = async (senderAddress) => {
           gadgets.push(gadget);
         } else if (gadget.archived === 1 && gadget.owner === senderAddress) {
           arcgadgets.push(gadget);
-        } else if (gadget.archived === 0 && gadget.price <= 8){
+        }  
+        //8000000 equals 8 in algos
+        if (gadget.archived === 0 && gadget.price <= 8000000){
             freegadgets.push(gadget);
         }
       }
