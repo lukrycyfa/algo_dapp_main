@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import { Button, Card, Col, Stack, Badge } from "react-bootstrap";
-import { microAlgosToString, truncateAddress } from "../../utils/conversions";
+import { truncateAddress } from "../../utils/conversions";
 import Identicon from "../utils/Identicon";
 
 const UserGadgets = ({ address, gadget, deleteGadget }) => {
-  const { name, image, description, price, appId, owner } = gadget;
+  const { name, image, description, appId, owner } = gadget;
 
   return (
     <Col key={appId}>
@@ -16,7 +16,6 @@ const UserGadgets = ({ address, gadget, deleteGadget }) => {
             </span>
             <Identicon size={28} address={address} />
             <Badge bg="secondary" className="ms-auto">
-              got for {microAlgosToString(price)}ALGOs
             </Badge>
           </Stack>
         </Card.Header>
