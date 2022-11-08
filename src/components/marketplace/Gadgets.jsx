@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import AddGadget from "./AddGadget";
 import UserGadgets from "./UserGadgets.jsx";
+    // freebies update //
+import FreeGadgets from "./FreeGadgets.jsx";    
+    // freebies update //
 import Gadget from "./Gadget";
 import Loader from "../utils/Loader";
 import { NotificationError, NotificationSuccess } from "../utils/Notifications";
@@ -11,7 +14,7 @@ import {
   deleteGadgetAction,
   getGadgetsAction,
   updateGadgetAction,
-  discountEligibility,
+  FreeBieEligibility,
   getUserGadgetAction,
   archiveAction,
   unarchiveAction,
@@ -25,6 +28,10 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
   const [usergads, SetUsersGads] = useState([]);
   const [owngad, setOwngad] = useState("");
   const [loading, setLoading] = useState(false);
+    // freebies update //
+  const [freegads, setFreeGads] = useState([]);
+  const [freebies, setFreeBies] = useState(false);
+    // freebies update //
   // const [appowner, setAppOwner] = useState(true); uncomment to restrcit creation
   // of application to dapp owner or First app user
 
@@ -42,12 +49,13 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
             setArchivedGads(allgadgets[1]);
             setOwngad(address);
             console.log(allgadgets[1], "archived");
-//             if (allgadgets[1][0].owner !== address) {
-//               // setAppOwner(false); uncomment to restrcit creation
-//               // of application to dapp owner or First app user
-//             } else if (allgadgets[1][0].owner === address) {
-//             }
           }
+            // freebies update //
+          if (allgadgets[2].length >= 1){
+            setFreeGads(allgadgets[2]);
+            console.log(allgadgets[2], "freebies");
+          }  
+              // freebies update //
         }
       })
 
@@ -64,29 +72,25 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
   }, []);
   //...
 
-  // get  users gadgets
+  // freebie update
+  // get  users gadgets and check freebie eligibility.
  const getUserGadgets = async () => {
     setLoading(true);
      getUserGadgetAction(address)
        .then((UserGadgets) => {
             SetUsersGads(UserGadgets);
-               if (UserGadgets.length < 1) {
-                  toast(
-                    <NotificationSuccess text="You have no discount yet." />
-                  );
-                } else if (UserGadgets.length >= 1) {
-                  discountEligibility(UserGadgets).then((discount) => {
+            FreeBieEligibility(address).then((discount) => {
                     if (discount === true) {
+                      setFreeBies(true);
                       toast(
-                        <NotificationSuccess text="You'vh earned  20% on one of your next purchase for buying 5 gadgets." />
+                        <NotificationSuccess text="You'vh earned a freebie." />
                       );
                     } else if (discount === false) {
                       toast(
-                        <NotificationSuccess text="You have no discount yet." />
+                        <NotificationSuccess text="You have no freebie yet." />
                       );
                     }
                   });
-                }
               })   
       .catch((error) => {
         console.log(error);
@@ -115,7 +119,22 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
         setLoading(false);
       });
   };
-  //...
+  //... freebies update
+    const createFreeGadget = async (address, data, user_note) => {
+    setLoading(true);
+    createGadgetAction(address, data, user_note)
+      .then(() => {
+        toast(<NotificationSuccess text="Gadget added successfully." />);
+        getGadgets();
+        fetchBalance(address);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast(<NotificationError text="Failed to create a gadget." />);
+        setLoading(false);
+      });
+  };
+  //...freebies update
 
   // buy gadgets
   const buyGadget = async (gadget, count) => {
@@ -232,6 +251,29 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
             ))}
         </>
       </Row>
+    {/* freebies update */}
+      {freebies && (
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1 className="fs-4 fw-bold mb-0"> FreeBies</h1>
+        </div>
+      )}
+      {freebies && (
+        <Row xs={1} sm={2} lg={3} className="g-3 mb-5 g-xl-4 g-xxl-5">
+          <>
+            {freegads &&
+              freegads.map((freegad, index) => (
+                <FreeGadgets
+                  address={address}
+                  gadget={freegad}
+                  createFreeGadget={createFreeGadget}
+                  refresh={refresh}
+                  key={index}
+                />
+              ))}
+          </>
+        </Row>
+      )}
+      {/* freebies update */}
       {owngad && (
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="fs-4 fw-bold mb-0">Archived Gadgets</h1>

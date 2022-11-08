@@ -135,14 +135,14 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
   });
 
   // checks if a client is eligible for a discount
-  if (discountEligibility(getUserGadgetAction(senderAddress)) === true) {
-    let val = (20 / 100) * nprice;
-    if (count === 1) {
-      nprice = val;
-    } else if (count > 1) {
-      nprice = gadget.price * (count - 1) + val;
-    }
-  }
+  // if (await discountEligibility(senderAddress) === true) {
+  //   let val = (70 / 100) * nprice;
+  //   if (count === 1) {
+  //     nprice = val;
+  //   } else if (count > 1) {
+  //     nprice = gadget.price * (count - 1) + val;
+  //   }
+  // }
   // Create PaymentTxn
   let paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     from: senderAddress,
@@ -188,16 +188,27 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
   );
 };
 
-//..
-// DISCOUNT ELIGIBILITY
+//.. freebies update
+// FreeBies ELIGIBILITY
 // verifies if a user is eligible for a discount
-export const discountEligibility = async (UserGadgets) => {
+export const FreeBieEligibility = async (senderAddress) => {
   console.log("Checking Eligibility...");
   let discount = false;
+  let user_note = new TextEncoder().encode(
+    `${senderAddress.slice(0, 4)}-${senderAddress.slice(54)}:new_user`
+  );
+  let get_app = await indexerClient
+    .searchForTransactions()
+    .notePrefix(Buffer.from(user_note).toString("base64"))
+    .txType("appl")
+    .minRound(minRound)
+    .do();
 
-  if (UserGadgets.length <= 0) {
+  console.log(get_app.transactions.length, "discount_app");
+  let dis_val = get_app.transactions.length
+  if (dis_val <= 0) {
     discount = false;
-  } else if (UserGadgets.length > 0 && UserGadgets.length % 3 === 0) {
+  } else if (dis_val > 0 && dis_val % 3 === 0) {
     discount = true;
   } else {
     discount = false;
@@ -301,6 +312,9 @@ export const getGadgetsAction = async (senderAddress) => {
   let allgadgets = [];
   let arcgadgets = [];
   let gadgets = [];
+  // freebies update //
+  let freegadgets = [];
+    // freebies update //  
   for (const transaction of transactionInfo.transactions) {
     let appId = transaction["created-application-index"];
     if (appId) {
@@ -312,7 +326,11 @@ export const getGadgetsAction = async (senderAddress) => {
           gadgets.push(gadget);
         } else if (gadget.archived === 1 && gadget.owner === senderAddress) {
           arcgadgets.push(gadget);
+            // freebies update //
+        } else if (gadget.archived === 0 && gadget.price <= 8){
+            freegadgets.push(gadget);
         }
+          // freebies update //
       }
     }
   }
@@ -320,6 +338,9 @@ export const getGadgetsAction = async (senderAddress) => {
   console.log(gadgets);
   allgadgets.push(arcgadgets);
   console.log(arcgadgets);
+  // freebies update //
+  allgadgets.push(freegadgets);
+  console.log(freegadgets);
   console.log("returning fetched gadgets....");
   return allgadgets;
 };
