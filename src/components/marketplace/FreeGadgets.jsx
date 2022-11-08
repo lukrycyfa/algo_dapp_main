@@ -41,7 +41,7 @@ const FreeGadgets = ({ address, gadget, createFreeGadget }) => {
               onClick={() => createFreeGadget(address, gadget, user_note)}
               className="w-75 py-3"
             >
-              Buy for 0.0003 ALGO
+              Buy for 0.001 ALGO
             </Button>
           </Form>
         </Card.Body>
