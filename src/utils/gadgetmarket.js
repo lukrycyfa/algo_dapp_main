@@ -190,9 +190,9 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
 };
 
 //..
-// DISCOUNT ELIGIBILITY
-// verifies if a user is eligible for a discount
-export const discountEligibility = async (senderAddress) => {
+// FREEBIE ELIGIBILITY
+// verifies if a user is eligible for a FreeBies
+export const FreeBieEligibility = async (senderAddress) => {
   console.log("Checking Eligibility...");
   let discount = false;
   let user_note = new TextEncoder().encode(
@@ -313,6 +313,7 @@ export const getGadgetsAction = async (senderAddress) => {
   let allgadgets = [];
   let arcgadgets = [];
   let gadgets = [];
+  let freegadgets = [];
   for (const transaction of transactionInfo.transactions) {
     let appId = transaction["created-application-index"];
     if (appId) {
@@ -324,6 +325,8 @@ export const getGadgetsAction = async (senderAddress) => {
           gadgets.push(gadget);
         } else if (gadget.archived === 1 && gadget.owner === senderAddress) {
           arcgadgets.push(gadget);
+        } else if (gadget.archived === 0 && gadget.price <= 8){
+            freegadgets.push(gadget);
         }
       }
     }
@@ -332,6 +335,8 @@ export const getGadgetsAction = async (senderAddress) => {
   console.log(gadgets);
   allgadgets.push(arcgadgets);
   console.log(arcgadgets);
+  allgadgets.push(freegadgets);
+  console.log(freegadgets);  
   console.log("returning fetched gadgets....");
   return allgadgets;
 };
