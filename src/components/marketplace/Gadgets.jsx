@@ -44,6 +44,10 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
             setOwngad(address);
             console.log(allgadgets[1], "archived");
           }
+         if (allgadgets[2].length >= 1){
+            setFreeGads(allgadgets[2]);
+            console.log(allgadgets[2], "freebies");
+          }  
         }
       })
 
