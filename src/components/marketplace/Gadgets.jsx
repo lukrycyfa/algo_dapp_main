@@ -83,7 +83,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
                     if (discount === true) {
                       setFreeBies(true);
                       toast(
-                        <NotificationSuccess text="You'vh earned a freebie." />
+                        <NotificationSuccess text="You Have a freebie." />
                       );
                     } else if (discount === false) {
                       toast(
@@ -120,7 +120,7 @@ const Gadgets = ({ address, fetchBalance, refresh }) => {
       });
   };
   //... freebies update
-    const createFreeGadget = async (address, data, user_note) => {
+  const createFreeGadget = async (address, data, user_note) => {
     setLoading(true);
     createGadgetAction(address, data, user_note)
       .then(() => {

@@ -5,7 +5,7 @@ import { microAlgosToString, truncateAddress } from "../../utils/conversions";
 import Identicon from "../utils/Identicon";
 
 // update here
-const FreeGadget = ({ address, gadget, createFreeGadget }) => {
+const FreeGadgets = ({ address, gadget, createFreeGadget }) => {
   const { name, image, description, price, sold, appId, owner } = gadget;
 
   const user_note = new TextEncoder().encode(
@@ -50,10 +50,10 @@ const FreeGadget = ({ address, gadget, createFreeGadget }) => {
   );
 };
 
-FreeGadget.propTypes = {
+FreeGadgets.propTypes = {
   address: PropTypes.string.isRequired,
   gadget: PropTypes.instanceOf(Object).isRequired,
   createFreeGadget: PropTypes.func.isRequired,
 };
 
-export default FreeGadget;
+export default FreeGadgets;

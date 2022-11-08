@@ -190,7 +190,7 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
 
 //.. freebies update
 // FreeBies ELIGIBILITY
-// verifies if a user is eligible for a discount
+// verifies if a user is eligible for a FreeBies
 export const FreeBieEligibility = async (senderAddress) => {
   console.log("Checking Eligibility...");
   let discount = false;
