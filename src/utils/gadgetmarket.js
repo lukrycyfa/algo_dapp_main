@@ -106,7 +106,6 @@ export const createGadgetAction = async (senderAddress, gadget, user_note) => {
     .do();
   let appId = transactionResponse["application-index"];
   console.log("Created new app-id: ", appId);
-  console.log(Buffer.from(note).toString("base64"));
   return appId;
 };
 
@@ -196,7 +195,6 @@ export const FreeBieEligibility = async (senderAddress) => {
     .minRound(minRound)
     .do();
 
-  console.log(get_app.transactions.length, "discount_app");
   let dis_val = get_app.transactions.length
   if (dis_val <= 0) {
     discount = false;
@@ -224,8 +222,6 @@ export const getUserGadgetAction = async (senderAddress) => {
     .minRound(minRound)
     .do();
 
-  console.log(get_app, "users_app");
-
   let UserGadgets = [];
   for (const tran of get_app.transactions) {
     let appId = tran["created-application-index"];
@@ -239,7 +235,7 @@ export const getUserGadgetAction = async (senderAddress) => {
     }
   }
 
-  console.log(UserGadgets, "Gadgets fetched user.");
+  console.log(UserGadgets, " Users Gadgets fetched.");
   return UserGadgets;
 };
 
@@ -300,7 +296,7 @@ export const getGadgetsAction = async (senderAddress) => {
     .txType("appl")
     .minRound(minRound)
     .do();
-  console.log(transactionInfo, "dapp_app");
+
   let allgadgets = [];
   let arcgadgets = [];
   let gadgets = [];
@@ -325,11 +321,8 @@ export const getGadgetsAction = async (senderAddress) => {
     }
   }
   allgadgets.push(gadgets);
-  console.log(gadgets);
   allgadgets.push(arcgadgets);
-  console.log(arcgadgets);
-  allgadgets.push(freegadgets);
-  console.log(freegadgets);  
+  allgadgets.push(freegadgets); 
   console.log("returning fetched gadgets....");
   return allgadgets;
 };
@@ -391,7 +384,6 @@ const getApplication = async (appId) => {
       sold = getField("SOLD", globalState).value.uint;
     }
 
-    console.log(response);
     return new Gadget(
       name,
       image,
@@ -421,7 +413,6 @@ export const updateGadgetAction = async (senderAddress, gadget) => {
     .lookupApplications(gadget._appId)
     .includeAll(true)
     .do();
-  console.log(response);
   if (response.application.deleted) {
     return null;
   }
