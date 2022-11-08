@@ -134,16 +134,7 @@ export const buyGadgetAction = async (senderAddress, gadget, count) => {
     appArgs: appArgs,
   });
 
-  // checks if a client is eligible for a discount
-  console.log(await discountEligibility(senderAddress), "Checker");
-  let val = (70 / 100) * nprice;
-  if ( await discountEligibility(senderAddress) === true) {
-    if (count === 1) {
-      nprice = val;
-    } else if (count > 1) {
-      nprice = (gadget.price * (count - 1)) + val;
-    }
-  }
+
   // Create PaymentTxn
   let paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     from: senderAddress,
