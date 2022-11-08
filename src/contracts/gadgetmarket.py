@@ -61,7 +61,6 @@ class Gadget:
             App.globalPut(self.Variables.image, Txn.application_args[2]),
             App.globalPut(self.Variables.description, Txn.application_args[3]),
             App.globalPut(self.Variables.price, Btoi(Txn.application_args[4])),
-            App.globalPut(self.Variables.sold, App.globalGet(self.Variables.sold)),
             Approve()
         ])
 
