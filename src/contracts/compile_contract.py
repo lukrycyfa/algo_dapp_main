@@ -1,6 +1,6 @@
 from pyteal import *
 
-from marketplace_contract import Gadget
+from gadgetmarket import Gadget
 
 if __name__ == "__main__":
     approval_program = Gadget().approval_program()
