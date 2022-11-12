@@ -65,6 +65,7 @@ class Gadget:
     def archive(self):
         return Seq([
             Assert(Txn.application_args.length() == Int(1)), # assert txn  application args length == 1.
+            Assert(Txn.sender() == Global.creator_address()),
             Assert(Txn.note() == Bytes("next-softtech:nxt5")),  # assert txn note == "next-softtech:nxt5".
             App.globalPut(self.Variables.archived, Int(1)), # set the archived value of requested app to 1.
             Approve()
@@ -74,6 +75,7 @@ class Gadget:
     def unarchive(self):
         return Seq([
             Assert(Txn.application_args.length() == Int(1)), # assert txn  application args length == 1.
+            Assert(Txn.sender() == Global.creator_address()),
             Assert(Txn.note() == Bytes("next-softtech:nxt5")), # assert txn note == "next-softtech:nxt5".
             App.globalPut(self.Variables.archived, Int(0)), # set the archived value of requested app to 0.
             Approve()
@@ -92,7 +94,8 @@ class Gadget:
         )
 
         can_buy = And(valid_number_of_transactions,
-                      valid_payment_to_seller) # the above objects passed for validation.
+                      valid_payment_to_seller,
+                      Txn.sender != Global.creator_address() ) # the above objects passed for validation.
 
         update_state = Seq([
             # Update the sold variable global state for requested application
