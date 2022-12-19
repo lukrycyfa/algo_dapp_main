@@ -23,7 +23,16 @@ class Gadget:
     def application_creation(self):
         return Seq([
             Assert(Txn.application_args.length() == Int(4)), # assert txn application args length == 4.
-            Assert(Btoi(Txn.application_args[3]) > Int(0)), # assert the  txn  args(price) > 0.
+            # checks to ensure that input data contains only valid values
+            Assert(
+                And(
+                    Len(Txn.application_args[0]) > Int(0),
+                    Len(Txn.application_args[1]) > Int(0),
+                    Len(Txn.application_args[2]) > Int(0),
+                    Btoi(Txn.application_args[3]) > Int(0)
+                ),
+                Txn.note() == Bytes("next-softtech:nxt5"),
+            ),
             
             # Update the global state of newly created  application with  txn  application args. 
             App.globalPut(self.Variables.name, Txn.application_args[0]),
@@ -41,7 +50,6 @@ class Gadget:
 
         validate = And(
             Txn.application_args.length() == Int(5), # assert txn  application args length == 5.
-            Txn.note() == Bytes("next-softtech:nxt5"), # assert txn note == "next-softtech:nxt5".
             Btoi(Txn.application_args[4]) > Int(0), # assert txn  application args(price) > 0.
         )
 
@@ -53,7 +61,6 @@ class Gadget:
             App.globalPut(self.Variables.image, Txn.application_args[2]),
             App.globalPut(self.Variables.description, Txn.application_args[3]),
             App.globalPut(self.Variables.price, Btoi(Txn.application_args[4])),
-            App.globalPut(self.Variables.sold, App.globalGet(self.Variables.sold)),
             Approve()
         ])
 
@@ -65,7 +72,8 @@ class Gadget:
     def archive(self):
         return Seq([
             Assert(Txn.application_args.length() == Int(1)), # assert txn  application args length == 1.
-            Assert(Txn.note() == Bytes("next-softtech:nxt5")),  # assert txn note == "next-softtech:nxt5".
+            Assert(Txn.sender() == Global.creator_address()),
+            Assert(App.globalGet(self.Variables.archived) == Int(0)),
             App.globalPut(self.Variables.archived, Int(1)), # set the archived value of requested app to 1.
             Approve()
         ])
@@ -74,7 +82,8 @@ class Gadget:
     def unarchive(self):
         return Seq([
             Assert(Txn.application_args.length() == Int(1)), # assert txn  application args length == 1.
-            Assert(Txn.note() == Bytes("next-softtech:nxt5")), # assert txn note == "next-softtech:nxt5".
+            Assert(Txn.sender() == Global.creator_address()),
+            Assert(App.globalGet(self.Variables.archived) == Int(1)),
             App.globalPut(self.Variables.archived, Int(0)), # set the archived value of requested app to 0.
             Approve()
         ])         
@@ -87,11 +96,13 @@ class Gadget:
 
         valid_payment_to_seller = And(
             Gtxn[1].type_enum() == TxnType.Payment,
+            Gtxn[1].amount() == App.globalGet(self.Variables.price) * Btoi(count),
             Gtxn[1].receiver() == Global.creator_address(),
+            Gtxn[0].sender() != Global.creator_address(), 
             Gtxn[1].sender() == Gtxn[0].sender(),
         )
 
-        can_buy = And(valid_number_of_transactions,
+        can_buy = And(App.globalGet(self.Variables.archived) == Int(0),valid_number_of_transactions,
                       valid_payment_to_seller) # the above objects passed for validation.
 
         update_state = Seq([
